@@ -1,1 +1,1 @@
-# Details to come
+# Wasserstein Domain Generalization

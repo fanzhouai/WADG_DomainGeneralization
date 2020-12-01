@@ -28,13 +28,7 @@ def compute_wasserstein(features, btch_sz, feature_extractor, discriminator, use
             else: 
                 disc_loss = dis_t.mean() - dis_k.mean()
 
-            #gradient_pntly=self.gradient_penalty(inputs[t * btch_sz:(t + 1) * btch_sz],inputs[k * btch_sz:(k + 1) * btch_sz], t, k)
-            # critic loss --->  E(f(x)) - E(f(y)) + gamma* ||grad(f(x+y/2))-1||
 
-            #(pred_t.mean() - pred_k.mean() ) + self.grad_weight *gradient_pntly
-                        #  negative sign compute wasserstien distance
-            #discrm_distnc_mtrx[t, k] += -(pred_t.mean() - pred_k.mean()).item()
-            #discrm_distnc_mtrx[k, t] = discrm_distnc_mtrx[t, k]
 
             dis_loss += disc_loss
     
@@ -71,7 +65,7 @@ def gradient_penalty(critic, h_s, h_t):
     return gradient_penalty
 
 def _return_dataset(data_name, target_, data_lists,config, mode= 'train', batch_size=16 ,need_balance = True):
-    #print(config)
+
     datasets = []
     if mode in ['train','val']:
         trans = config[data_name]['train_transform']
@@ -138,16 +132,8 @@ def _return_dataset(data_name, target_, data_lists,config, mode= 'train', batch_
     target_list = data_lists[data_name]['test'][target_domain]
     target_dataset = FileListDataset(list_path= target_list, path_prefix=_prefix,transform=trans, filter=(lambda x: x in range(num_class)))
     
-    #target_classes = target_dataset.labels
-    #target_freq = Counter(target_classes)
-    #target_class_weight = {x : 1.0 / target_freq[x] if need_balance else 1.0 for x in target_freq}
-
-    #target_weights = [target_class_weight[x] for x in target_dataset.labels]
-    #target_sampler = WeightedRandomSampler(target_weights, len(target_dataset.labels))
     target_loader = DataLoader(target_dataset,batch_size=batch_size, shuffle=True, drop_last=True)
-
-    
-    
+  
     return loaders, target_loader
 
 
@@ -164,9 +150,7 @@ class MultiSimilarityLoss(nn.Module):
         assert feats.size(0) == labels.size(0), \
             f"feats.size(0): {feats.size(0)} is not equal to labels.size(0): {labels.size(0)}"
         batch_size = feats.size(0)
-        #print('batch_size is', batch_size)
         sim_mat = torch.matmul(feats, torch.t(feats))
-        #print('lables is',labels)
         epsilon = 1e-5
         loss = list()
 
@@ -203,26 +187,3 @@ def sort_loaders(loaders_list, reverse=True):
         tuple_.append((loaders_list[i],len(loaders_list[i])))
     
     return sorted(tuple_, key=lambda tuple_len: tuple_len[1],reverse=reverse)
-    
-
-def get_optimizer(model, init_lr, momentum, weight_decay, feature_fixed=False, nesterov=False, per_layer=False):
-    if feature_fixed:
-        params_to_update = []
-        for name, param in model.named_parameters():
-            if param.requires_grad == True:
-                params_to_update.append(param)
-    else:
-        if per_layer:
-            if not isinstance(model, list):
-                raise ValueError('Model must be a list type.')
-            optimizer = optim.SGD(
-                [{'params': model_.parameters(), 'lr': init_lr*alpha} for model_, alpha in model],
-                lr=init_lr, momentum=momentum, weight_decay=weight_decay, nesterov=nesterov)
-                                   
-        else:
-            params_to_update = model.parameters()
-            optimizer = optim.SGD(
-                params_to_update, lr=init_lr, momentum=momentum, 
-                weight_decay=weight_decay, nesterov=nesterov)
-    
-    return optimizer

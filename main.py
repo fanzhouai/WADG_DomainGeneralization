@@ -38,9 +38,9 @@ parser.add_argument("--weight_decay", type = float, help="weight_decay", default
 parser.add_argument("--wd_round", type = int, help="learning_rate_dis", default=1)
 parser.add_argument("--weight_mtr_loss", type = float, help="weight_mtr_loss", default=1e-5)
 
-parser.add_argument("--mtr_margin", type = float, help="weight_mtr_loss", default=1.0)
-parser.add_argument("--mtr_scale_pos", type = float, help="weight_mtr_loss", default=2.0)
-parser.add_argument("--mtr_scale_neg", type = float, help="weight_mtr_loss", default=40.0)
+parser.add_argument("--mtr_margin", type = float, help="mtr_margin", default=1.0)
+parser.add_argument("--mtr_scale_pos", type = float, help="mtr_loss_pos_scale", default=2.0)
+parser.add_argument("--mtr_scale_neg", type = float, help="mtr_loss_neg_loss", default=40.0)
 parser.add_argument("--gp_param", type = float, help="weight of gradient penalty", default=10.0)
 parser.add_argument("--add_clsuter", type = int, help="weight of gradient penalty", default=5)
 

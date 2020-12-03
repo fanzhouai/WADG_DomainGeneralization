@@ -42,7 +42,7 @@ parser.add_argument("--mtr_margin", type = float, help="mtr_margin", default=1.0
 parser.add_argument("--mtr_scale_pos", type = float, help="mtr_loss_pos_scale", default=2.0)
 parser.add_argument("--mtr_scale_neg", type = float, help="mtr_loss_neg_loss", default=40.0)
 parser.add_argument("--gp_param", type = float, help="weight of gradient penalty", default=10.0)
-parser.add_argument("--add_clsuter", type = int, help="weight of gradient penalty", default=5)
+parser.add_argument("--add_clsuter", type = int, default=5)
 
 
 args = parser.parse_args()

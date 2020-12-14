@@ -213,6 +213,10 @@ class wadg():
 
                 total_acc_t    += (out1.max(1)[1] == y_t).float().mean().item()
 
+            acc_t = 100.0* total_acc_t/num_batches
+            if acc_t > best_acc:
+                best_acc = acc_t
+
             all_acc.append(acc_t)
 
             print('========== epoch {:d} ========'.format(epoch))
@@ -223,7 +227,7 @@ class wadg():
 
 
 
-        print('best acc is', max(all_acc))
+        print('best acc is', best_acc)
         print('train model index',time_now)
         return all_acc
              

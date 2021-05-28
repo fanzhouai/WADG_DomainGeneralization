@@ -1,5 +1,5 @@
 # Wasserstein Domain Generalization
-Details coming soon
+
 
 
 An example for experiments on PACS choosing Sketch as target:
